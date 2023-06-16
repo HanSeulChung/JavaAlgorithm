@@ -7,7 +7,7 @@ package com.codingtest.programmers.level1.개인정보유효기간;
 * @version : 1.0.0
 * @modifyed :
 **/
-public class Main {
+public class Soluiton {
     public static int[] solution(String today, String[] terms, String[] privacies) {
         int[] answer = {};
         return answer;

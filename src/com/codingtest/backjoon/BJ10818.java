@@ -1,11 +1,9 @@
 package com.codingtest.backjoon;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class BJ10818 {
-
     public static void main(String[] args) {
         int[] answer = new int[2];
         int N =0;
@@ -25,6 +23,7 @@ public class BJ10818 {
                 max = num;
             }
         }
+
         answer[0] = min;
         answer[1] = max;
         System.out.println(Arrays.toString(intArr));

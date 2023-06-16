@@ -18,9 +18,29 @@ package com.lecture.선형자료구조.linkedlist.practices;
 
 public class P2 {
     public static boolean checkPalindrome(LinkedList list) {
+        Node cur = list.head;
+        Node left = list.head;
+        Node right = null;
 
+        int cnt =0;
+        while ( cur!= null){
+            cnt++;
+            right = cur;
+            cur = cur.next;
+        }
+        Node prevRight = right;
+        for (int i = 0; i < cnt/2; i++) {
+            if(left.data != right.data){
+                return false;
+            }
+            left = left.next;
+            right = left;
+            while(right.next != prevRight){
+                right = right.next;
+            }
+        }
 
-        return false;
+        return true;
     }
 
     public static void main(String[] args) {

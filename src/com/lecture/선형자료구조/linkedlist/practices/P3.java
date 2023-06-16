@@ -14,7 +14,28 @@ package com.lecture.선형자료구조.linkedlist.practices;
 
 public class P3 {
     public static LinkedList reverseList(LinkedList list, int left, int right) {
-        return null;
+        Node cur1 = null;
+        Node pre1 = null;
+
+        cur1 = list.head;
+        for(int i =0; i< left -1; i++){
+            pre1 = cur1;
+            cur1 = cur1.next;
+        }
+
+        Node cur2 = cur1;
+        Node pre2 = pre1;
+        Node after = null;
+        for (int i = left; i <=right ; i++) {
+            after = cur2.next;
+            cur2.next = pre2;
+            pre2 = cur2;
+            cur2 = after;
+        }
+        pre1.next = pre2;
+        cur1.next = cur2;
+
+        return list;
     }
 
     public static void main(String[] args) {

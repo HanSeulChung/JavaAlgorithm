@@ -3,7 +3,7 @@ package com.codingtest.backjoon;
 /**
 * @package : com.codingtest.backjoon
 * @name : BJ9012.java
-* @date : 2023-06-19 오후 5:46
+* @date : 2023-06-19 오후 6:13
 * @author : HSChung
 * @version : 1.0.0
 * @modifyed :

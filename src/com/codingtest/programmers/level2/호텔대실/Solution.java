@@ -1,4 +1,4 @@
-package com.codingtest.programmers.level1.호텔대실;
+package com.codingtest.programmers.level2.호텔대실;
 /**
 * @package : com.codingtest.programmers.level1.호텔대실
 * @name : Solution.java

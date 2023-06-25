@@ -9,10 +9,48 @@ package com.lecture.비선형자료구조.binarysearchtree.practices;
 // 입력 트리: 5, 1, 48, null, null, 12, 51
 // 출력: 3
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class P2 {
 
     public static void solution(Integer[] data) {
+        BinarySearchTree bst = new BinarySearchTree(data[0]);
 
+        for (int i = 1; i < data.length; i++) {
+            if (data[i] == null) {
+                continue;
+            }
+            bst.addNode(data[i]);
+        }
+
+        ArrayList<Integer> list = new ArrayList<>();
+        levelOrder(bst.head, list);
+
+        int min = list.stream().min((x1, x2) -> x1 > x2 ? 1: -1).get();
+        // 참고2
+        min = Collections.min(list);
+        System.out.println(min);
+    }
+
+    public static void levelOrder(Node node, ArrayList list) {
+        Queue<Node> queue = new LinkedList();
+        queue.add(node);
+        while (!queue.isEmpty()) {
+            Node cur = queue.poll();
+
+            if (cur.left != null) {
+                queue.offer(cur.left);
+                list.add(Math.abs(cur.key - cur.left.key));
+            }
+
+            if (cur.right != null) {
+                queue.offer(cur.right);
+                list.add(Math.abs(cur.key - cur.right.key));
+            }
+        }
     }
 
     public static void main(String[] args) {

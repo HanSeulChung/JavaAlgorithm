@@ -16,7 +16,29 @@ package com.lecture.비선형자료구조.graph.practices;
 
 public class P3 {
     public static void solution(int[][] graph) {
+        int[] flags = new int[graph.length]; //graph의 개수가 노드 개수임 -> 0번인덱스는 0번 노드에 연결된 것 1번인덱스는 1번 노드에 연결된 것이기 때문 ..
 
+        if(checkSplit(graph, flags, 1, 0) == true){
+            System.out.println("true");
+        } else {
+            System.out.println("false");
+        }
+
+    }
+
+    public static boolean checkSplit(int[][] graph, int[] flags, int flag, int node){
+        if(flags[node] !=0){
+            return flags[node] == flag;
+        }
+
+        flags[node] = flag;
+
+        for (int adjacentNode : graph[node]) {
+            if(!checkSplit(graph, flags, -flag, adjacentNode)){
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {

@@ -57,7 +57,48 @@ class MyGraphList {
 
 public class P2 {
     public static void solution(int n, int[][] edges, int source, int dest) {
+        MyGraphList graph = new MyGraphList(n);
 
+        for (int i = 0; i < n; i++) {
+            graph.addVertex(i);
+        }
+
+        for (int i = 0; i < edges.length; i++) {
+            graph.addEdge(edges[i][0] , edges[i][1]);
+        }
+
+        ArrayList<Integer> visitedItem = new ArrayList<>();
+        dfs(graph, 0, visitedItem);
+
+        if(visitedItem.contains(source) && visitedItem.contains(dest)) {
+            System.out.println("true");
+        } else {
+            System.out.println("false");
+        }
+    }
+
+    public static void dfs(MyGraphList graph, int id, ArrayList<Integer> visitedItem){
+        boolean[] visited = new boolean[graph.elemCnt];
+        Stack<Integer> stack = new Stack<>();
+
+        stack.push(id);
+        visited[id] = true;
+
+        while(!stack.isEmpty()){
+            int curId = stack.pop();
+
+            visitedItem.add(curId);
+
+            Node cur = graph.adjList[curId];
+            while(cur != null){
+                if(visited[cur.id]==false){ // 방문했던적 없는 친구들만 stack에 추가
+                    stack.push(cur.id);
+                    visited[cur.id]=true;
+                }
+                cur = cur.next;
+            }
+
+        }
     }
 
     public static void main(String[] args) {

@@ -12,7 +12,9 @@ public class Practice1{
         }
 
         List<Character> listkeySet = new ArrayList<>(lhmap.keySet());
+        System.out.println(listkeySet);
         Collections.sort(listkeySet, (v1, v2) -> lhmap.get(v2).compareTo(lhmap.get(v1)));
+        System.out.println(listkeySet);
         for(Character charkey: listkeySet){
             sb.append(charkey).append(" ");
         }
@@ -26,7 +28,7 @@ public class Practice1{
     }
 
     public static void main(String[] args){
-        String s = "221123";
+        String s = "221123333";
         System.out.println(solution(s));
     }
 }

@@ -1,7 +1,22 @@
 package com.codingtest.zerobaseshool.No1_1;
 
 public class number5 {
-    public int solution(String S) {
+    public static int soluiton1(String S){
+        int answer = 0;
+        int num = Integer.parseInt(S,2);
+        while(num!=0){
+            if(num%2==0){
+                num/=2;
+            } else{
+                num-=1;
+            }
+            answer++;
+        }
+
+
+        return answer;
+    }
+    public static int solution(String S) {
         int answer = 0;
         int tenN = 0;
         //System.out.println(S);
@@ -27,5 +42,10 @@ public class number5 {
 
         //System.out.println(tenN);
         return answer;
+    }
+
+    public static void main(String[] args) {
+        String S = "1101";
+        System.out.println(soluiton1(S));
     }
 }

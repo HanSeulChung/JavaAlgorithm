@@ -11,6 +11,8 @@ public class BJ2615{
     public static int winNum = 0;
     public static int xIdx = -1;
     public static int yIdx = -1;
+
+    public static int cnt = 1;
     public static void checkWin(int x, int y, int num){
         if(x<0 || y< 0|| x >map.length -1 || y>map[0].length ){
             return ;
@@ -22,25 +24,17 @@ public class BJ2615{
         for(int i =0; i<4; i++){
             int next_x = x;
             int next_y = y;
-            int cnt = 1;
             while(true){
                 next_x += dx[i];
                 next_y += dy[i];
                 if( 0<=next_x && next_x<19 &&0<=next_y && next_y<19){
                     if(map[next_x][next_y]== num ) {
                         cnt +=1;
-                    } else {
-                        break;
                     }
                 } else {
                     break;
                 }
-                next_x = x;
-                next_y = y;
                 if(cnt == 5){
-                    xIdx = x+1;
-                    yIdx = y+1;
-                    winNum = num;
                     break;
                 }
             }
@@ -55,11 +49,25 @@ public class BJ2615{
             st  = new StringTokenizer(br.readLine());
             for (int j = 0; j < 19; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
-                if(map[i][j] == 1 || map[i][j] == 2){
-                    checkWin(i, j, map[i][j]);
-                }
             }
         }
+        for (int i = 0; i < 19; i++) {
+            for (int j = 0; j < 19; j++) {
+                if(map[i][j] == 1 || map[i][j] == 2){
+                    checkWin(i, j, map[i][j]);
+                    if(cnt==5){
+                        xIdx = i + 1;
+                        yIdx = j + 1;
+                        winNum = map[i][j];
+                        break;
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+        }
+
         System.out.println(winNum);
         System.out.printf("%d %d" ,xIdx , yIdx);
     }

@@ -20,15 +20,100 @@ package com.lecture.알고리즘.backtraking.practices;
 // 결과: 4
 
 
+import java.util.ArrayList;
+
 public class Practice4 {
     final static int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    static int cnt;
+
+    static class Coin {
+        int x;
+        int y;
+
+        public Coin(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 
     public static void solution(char[][] board) {
         if (board == null || board.length == 0 || board[0].length == 0) {
             return;
         }
 
+        int n = board.length;
+        int m = board[0].length;
+        cnt = Integer.MAX_VALUE;
 
+        ArrayList<Coin> coins = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                // 동전 2개 찾아서 coins 에 추가
+                if (board[i][j] == 'o') {
+                    coins.add(new Coin(j, i));
+                }
+            }
+        }
+
+        Coin coin1 = coins.get(0);
+        Coin coin2 = coins.get(1);
+        backTracking(board, m, n, coin1.x, coin1.y, coin2.x, coin2.y, 0);
+        System.out.println(cnt == Integer.MAX_VALUE ? -1 : cnt);
+    }
+
+    public static void backTracking(char[][] board, int m, int n, int x1, int y1, int x2, int y2, int moveCnt) {
+        // 10번 이상 이동하는 경우 return
+        if (moveCnt >= 10) {
+            return;
+        }
+
+        // 두 동전은 같은 방향으로 함께 이동
+        for (int[] dir: dirs) {
+            // 1번 동전 다음 위치
+            int x1Next = x1 + dir[0];
+            int y1Next = y1 + dir[1];
+
+            // 2번 동전 다음 위치
+            int x2Next = x2 + dir[0];
+            int y2Next = y2 + dir[1];
+
+            // 밖으로 떨어진 동전 개수 세는 용
+            int dropCnt = 0;
+
+            // 떨어졌는지 확인
+            if (x1Next < 0 || x1Next >= m || y1Next < 0 || y1Next >= n) {
+                dropCnt += 1;
+            }
+
+            if (x2Next < 0 || x2Next >= m || y2Next < 0 || y2Next >= n) {
+                dropCnt += 1;
+            }
+
+            // 두 동전 중 하나만 떨어뜨려야 하므로 이 경로는 continue 처리
+            if (dropCnt == 2) {
+                continue;
+            }
+
+            // 하나 떨어졌으면 cnt 반환
+            if (dropCnt == 1) {
+                cnt = Math.min(cnt, moveCnt + 1);
+                return;
+            }
+
+            // 벽이면 제자리로 두고 다음 진행
+            if (board[y1Next][x1Next] == '#') {
+                x1Next = x1;
+                y1Next = y1;
+            }
+
+            // 벽이면 제자리로 두고 다음 진행
+            if (board[y2Next][x2Next] == '#') {
+                x2Next = x2;
+                y2Next = y2;
+            }
+
+            backTracking(board, m, n, x1Next, y1Next, x2Next, y2Next, moveCnt + 1);
+        }
     }
 
     public static void main(String[] args) {

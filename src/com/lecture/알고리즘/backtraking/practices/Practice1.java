@@ -27,12 +27,16 @@ public class Practice1 {
         }
 
         for (int i = 0; i < n; i++) {
-            if(!visited[i]){
-                visited[i]=true;
-                out[depth] = i + 1;
-                permutation(n,m,depth+1);
-                visited[i]=false;
-            }
+
+            out[depth] = i + 1;
+            permutation(n,m,depth+1);
+
+//            if(!visited[i]){
+//                visited[i]=true;
+//                out[depth] = i + 1;
+//                permutation(n,m,depth+1);
+//                visited[i]=false;
+//            }
         }
     }
 

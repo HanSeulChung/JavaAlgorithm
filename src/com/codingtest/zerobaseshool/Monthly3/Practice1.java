@@ -2,36 +2,52 @@ package com.codingtest.zerobaseshool.Monthly3;
 
 import java.util.*;
 
-public class Practice1 {
-    public int solution(int[] arrive, int[] patience) {
-        int answer = 0;
-        int person = 0;
+class Point {
+    int start;
+    int finish;
 
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for(int i = 0; i < arrive.length; i++){
-            if(map.containsKey(arrive[i])){
-                answer = answer + 2;
-                map.remove(arrive[i]);
+    public Point(int start, int finish){
+        this.start = start;
+        this.finish = finish;
+    }
+}
+
+public class Practice1 {
+    public static int solution(int[] arrive, int[] patience) {
+        int answer = 0;
+
+        PriorityQueue<Point> pq = new PriorityQueue<>( (x, y) -> {
+            int a = x.start;
+            int b = y.start;
+            if(a == b) {
+                return (x.finish - x.start) > (y.finish - y.start) ? 1 : -1;
             }
-            map.put(arrive[i], i);
+            return a - b;
+
+        });
+
+        for (int i = 0; i < arrive.length; i++){
+            pq.offer(new Point(arrive[i], arrive[i] + patience[i]));
         }
 
-        List<Integer> list = new ArrayList<>(map.keySet());
-        Collections.sort(list);
-        int p1 = 0;
-        while(p1<list.size()-1){
-            if(person == 2){
-                p1 = p1 + 2;
-                person= 0;
+
+        while(pq.size() >= 2){
+            Point first = pq.poll();
+            Point second = pq.poll();
+
+            if (first.finish >= second.start){
                 answer = answer + 2;
-            }
-            else if (list.get(p1)+patience[map.get(list.get(p1))] >= list.get(p1+1)){
-                person = 2;
             } else {
-                p1++;
+                pq.offer(new Point(second.start, second.finish));
             }
         }
 
         return answer;
+    }
+
+    public static void main(String[] args) {
+        int[] arrive = {12, 4, 5, 2, 7, 16};
+        int[] patience = {4, 6, 1, 3, 3, 2};
+        System.out.println(solution(arrive, patience));
     }
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
+// 백준문제 https://www.acmicpc.net/problem/3190
 public class Practice5 {
     public static Integer solution(int n, int k, int l, ArrayList<ArrayList> apples, Queue<ArrayList> moves) {
         int[][] board = new int[n + 1][n + 1];

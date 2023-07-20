@@ -1,8 +1,42 @@
 package com.lecture.선형자료구조.practices2;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Doc {
+    int no;
+    int priority;
+
+    public Doc(int no, int priority) {
+        this.no = no;
+        this.priority = priority;
+    }
+}
+
 public class Practice1 {
     public static void solution(int docs, int target, int[] priority) {
+        Queue<Doc> queue = new LinkedList<>();
 
+        for (int i = 0; i < docs; i++) {
+            queue.add(new Doc(i, priority[i]));
+        }
+
+        int cnt = 1;
+        while (true) {
+            Doc cur = queue.poll();
+
+            Doc[] highP = queue.stream().filter(x -> x.priority > cur.priority).toArray(Doc[]::new);
+
+            if (highP.length > 0) {
+                queue.add(cur);
+            } else {
+                if (cur.no == target){
+                    System.out.println(cnt);
+                    break;
+                }
+                cnt++;
+            }
+        }
     }
 
     public static void main(String[] args) {

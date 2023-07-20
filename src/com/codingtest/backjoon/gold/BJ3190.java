@@ -17,14 +17,16 @@ public class BJ3190{
         N = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
         applesN = Integer.parseInt(st.nextToken());
-        if (applesN != 0) {
 
-        }
-        apples = new int[applesN][2];
-        for (int i = 0; i < applesN; i++){
-            st = new StringTokenizer(br.readLine());
-            apples[i][0] = Integer.parseInt(st.nextToken());
-            apples[i][1] = Integer.parseInt(st.nextToken());
+        if(applesN == 0) {
+            apples = new int[0][0];
+        } else {
+            apples = new int[applesN][2];
+            for (int i = 0; i < applesN; i++){
+                st = new StringTokenizer(br.readLine());
+                apples[i][0] = Integer.parseInt(st.nextToken());
+                apples[i][1] = Integer.parseInt(st.nextToken());
+            }
         }
 
         snakeroutesN = Integer.parseInt(br.readLine());
@@ -85,10 +87,12 @@ public class BJ3190{
                     dIdx = (dIdx + 1) % 4;
                     snakeroutes.poll();
                 } else if ((char)snakeroutes.peek().get(1) == 'L') {
-                    dIdx = (dIdx - 1) % 4;
+                    //dIdx = (dIdx - 1) % 4;
+                    dIdx = (dIdx + 3) % 4;
                     snakeroutes.poll();
+                    }
                 }
             }
-        }
+
     }
 }

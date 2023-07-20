@@ -5,8 +5,28 @@ import java.util.Hashtable;
 
 public class Practice4 {
     public static String solution(String[] participant, String[] completion) {
+        String result = "";
+        Hashtable<String, Integer> ht = new Hashtable<>();
 
-        return null;
+        for (String item : participant) {
+            if (ht.containsKey(item)) {
+                ht.put(item, ht.get(item) + 1);
+            } else {
+                ht.put(item, 1);
+            }
+        }
+
+        for (String item : completion) {
+            ht.put(item, ht.get(item) - 1);
+        }
+
+        for (String item : participant) {
+            if (ht.get(item) > 0) { // 단 한명의 완주하지 못한 선수이기 때문에 단순하고 쉬웠다. 조금 어렵게 꼰다면 나는 풀 수 있을까?
+                result = item;
+                break;
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {

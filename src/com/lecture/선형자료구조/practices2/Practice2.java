@@ -1,8 +1,37 @@
 package com.lecture.선형자료구조.practices2;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
+
 public class Practice2 {
     public static void solution(int[] nums) {
+        int[] originnums = nums.clone();
+        Stack<Integer> stack = new Stack<>();
+        ArrayList<String> result = new ArrayList<>();
 
+        int idx = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+
+            if (num > idx) {
+                for (int j = idx + 1; j < num + 1; j++) {
+                    stack.push(j);
+                    result.add("+");
+                }
+                idx = num;
+            } else if (stack.peek() != num) {
+                System.out.println("NO");
+                return;
+            }
+
+            stack.pop();
+            result.add("-");
+        }
+        for (String item : result){
+            System.out.print(item);
+        }
+        System.out.println();
     }
 
     public static void main(String[] args) {

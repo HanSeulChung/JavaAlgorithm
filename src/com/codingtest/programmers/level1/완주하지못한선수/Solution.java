@@ -43,4 +43,4 @@ public class Solution {
         System.out.println(solution(participant, completion));
 
     }
-    }
+}

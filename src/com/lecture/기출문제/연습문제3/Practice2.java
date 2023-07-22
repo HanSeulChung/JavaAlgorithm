@@ -4,8 +4,16 @@ import java.util.Arrays;
 
 public class Practice2 {
     public static String[] solution(int n, int[] memo1, int[] memo2) {
+        String[] result = new String[n];
 
-        return null;
+        for (int i = 0; i < n; i++) {
+            String decoding = Integer.toBinaryString(memo1[i] | memo2[i]);
+            decoding = String.format("%" + n + "s",decoding);
+            decoding = decoding.replaceAll("0", " ");
+            decoding = decoding.replaceAll("1", "#");
+            result[i] = decoding;
+        }
+        return result;
     }
 
     public static void main(String[] args) {

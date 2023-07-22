@@ -1,5 +1,6 @@
 package com.lecture.기출문제.연습문제3;
 
+// 이진탐색 .. ..
 public class Practice3 {
     public static int solution(int[] stones, int maxJump) {
 

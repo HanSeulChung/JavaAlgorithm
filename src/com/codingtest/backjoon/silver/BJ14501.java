@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 public class BJ14501{
     static int _n;
-    static int[] _days;g
+    static int[] _days;
     static int[] _prices;
     static int result;
     public static int solution2(int[] days, int[] prices, int n) {

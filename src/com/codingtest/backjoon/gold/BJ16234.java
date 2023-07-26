@@ -20,7 +20,7 @@ public class BJ16234{
         L = Integer.parseInt(st.nextToken());
         R = Integer.parseInt(st.nextToken());
         Diff = R - L;
-        
+
         map = new int[N][N];
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());

@@ -21,6 +21,7 @@ public class BJ17142{
     final static int EMPTY = 0;
     final static int WALL = 1;
     final static int UNACTIVEVIRUS = 2;
+    final static int ACTIVEVIRUS = 3;
     static int N;
 
     static int activevirusCnt;
@@ -28,7 +29,7 @@ public class BJ17142{
     static int[] dirX = {-1, 0, 1, 0};
     static int[] dirY = {0, 1, 0, -1};
     static int[][] map;
-    static boolean[] visited;
+    static boolean[][] visited;
     static ArrayList<Point> virusPoints;
     static int min = Integer.MAX_VALUE;
     public static void main(String[] args) throws IOException {
@@ -37,9 +38,9 @@ public class BJ17142{
 
         N = Integer.parseInt(st.nextToken());
         map = new int[N][N];
-        visited = new boolean[N];
+        visited = new boolean[N][N];
         activevirusCnt = Integer.parseInt(st.nextToken());
-
+        virusPoints = new ArrayList<>();
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
@@ -68,10 +69,11 @@ public class BJ17142{
         }
 
         for (int i = start; i < virusPoints.size(); i++) {
-            if (!visited[i]) {
-                visited[i] = true; // 활성화 처리
+            Point virusPoint = virusPoints.get(i);
+            if (!visited[virusPoint.x][virusPoint.y]) {
+                visited[virusPoint.x][virusPoint.y] = true; // 활성화 처리
                 combination(start + 1, cnt + 1); // 다시 경우의 수 카운팅
-                visited[i] = false; // 비활성화 처리
+                visited[virusPoint.x][virusPoint.y] = false; // 비활성화 처리
             }
         }
     }
@@ -81,15 +83,16 @@ public class BJ17142{
         boolean[][] virusVisited = new boolean[N][N];
 
         for (int i = 0; i < virusPoints.size(); i++) {
-            if (visited[i]) { // 활성화 시킨 바이러스 일 경우 q에 추가함
-                q.add(new Point(virusPoints.get(i).x, virusPoints.get(i).y));
+            Point p = virusPoints.get(i);
+            if (visited[p.x][p.y]) { // 활성화 시킨 바이러스 일 경우 q에 추가함
+                q.add(new Point(p.x, p.y));
             }
         }
 
-        int time = 0; // 바이러스 확산 시간
         int zeroCnt = 0; // 비어있는 공간
-
+        int time = 0;
         while (!q.isEmpty()) {
+            time++;
             Point point = q.poll();
             int pointX = point.x;
             int pointY = point.y;
@@ -97,7 +100,31 @@ public class BJ17142{
             for (int i = 0; i < dirX.length; i++) {
                 int xNext = pointX + dirX[i];
                 int yNext = pointY + dirY[i];
+
+                if (xNext < 0 || xNext >= N || yNext < 0 || yNext > N) {
+                    continue;
+                }
+                if(!visited[xNext][yNext] && map[xNext][yNext] == WALL) {
+                    continue;
+                }
+
+                if(!visited[xNext][yNext] && map[xNext][yNext] == EMPTY) {
+                    zeroCnt++;
+                    visited[xNext][yNext] = true;
+                    q.offer(new Point(xNext, yNext));
+                } else if (!visited[xNext][yNext] && map[xNext][yNext] == UNACTIVEVIRUS) {
+                    visited[xNext][yNext] = true;
+                    q.offer(new Point(xNext, yNext));
+                }
             }
+        }
+
+        if(emptyCnt != zeroCnt) {
+            System.out.println(-1);
+            return;
+        } else {
+            System.out.println(time);
+            return;
         }
     }
 }

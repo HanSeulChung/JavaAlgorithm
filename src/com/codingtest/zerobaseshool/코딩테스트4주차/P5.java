@@ -5,6 +5,17 @@ import java.util.stream.Collectors;
 
 public class P5 {
     public int[][] mysolution(int[][] buildings) {
+        /*
+테스트 1 〉 통과 (0.75ms, 74.7MB)
+테스트 2 〉 통과 (0.65ms, 77.8MB)
+테스트 3 〉 통과 (0.74ms, 72.3MB)
+테스트 4 〉 통과 (0.80ms, 75.6MB)
+테스트 5 〉 통과 (6.70ms, 71.6MB)
+채점 결과
+정확성: 20.0
+효율성: 0.0
+합계: 20.0 / 20.0
+        * */
         int[][] answer = new int[2][2];
         Arrays.sort(buildings, (b1, b2) -> b1[0] - b2[0]);
         int finishN = 0;
@@ -25,7 +36,6 @@ public class P5 {
         int prevHeight = 0;
         if (buildings[0][0] == 0) {
             resultList.add(new int[]{0, buildings[0][2]});
-            prevHeight = buildings[0][2];
         }
         for (int i = 1; i < finishN; i++) {
             prevHeight = checkSilhouette[i - 1];
@@ -45,6 +55,17 @@ public class P5 {
     }
 
     public int[][] solution(int[][] buildings) {
+        /*
+테스트 1 〉 통과 (7.57ms, 76.3MB)
+테스트 2 〉 통과 (6.92ms, 91.8MB)
+테스트 3 〉 통과 (7.97ms, 79.7MB)
+테스트 4 〉 통과 (6.60ms, 75.5MB)
+테스트 5 〉 통과 (13.36ms, 80.1MB)
+채점 결과
+정확성: 20.0
+효율성: 0.0
+합계: 20.0 / 20.0
+        * */
         List<Point> points
                 = Arrays.stream(buildings)
                 .map(x -> Arrays.asList( // List.of 는 java 9부터 가능 나는 8이라 Arrays.asList(array)로 대체
@@ -64,7 +85,7 @@ public class P5 {
             if (point.direction == -1) {
                 priorityQueue.offer(point.y);
             } else {
-                priorityQueue.offer(point.y);
+                priorityQueue.remove(point.y);
             }
 
             int mostHeight = priorityQueue.peek();

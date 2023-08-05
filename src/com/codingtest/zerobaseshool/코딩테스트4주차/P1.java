@@ -7,6 +7,20 @@ import java.util.Map;
 
 public class P1 {
     public static String[][] mysolution(String[] titles, String[] lyrics, String[] problems) {
+        /*
+ 정확성 테스트
+테스트 1 〉 통과 (0.52ms, 84.4MB)
+테스트 2 〉 통과 (0.32ms, 76.7MB)
+테스트 3 〉 통과 (0.80ms, 77.1MB)
+테스트 4 〉 통과 (0.57ms, 73.6MB)
+테스트 5 〉 통과 (0.20ms, 75.9MB)
+효율성 테스트
+테스트 1 〉 통과 (0.77ms, 52.4MB)
+테스트 2 〉 통과 (3.31ms, 52.8MB)
+테스트 3 〉 통과 (9.74ms, 53.6MB)
+테스트 4 〉 통과 (11.96ms, 64.5MB)
+테스트 5 〉 통과 (112.92ms, 85.5MB)
+        * */
         List<String[]> answerList = new ArrayList<>();
 
         for (String problem : problems) {
@@ -26,6 +40,19 @@ public class P1 {
     }
 
     public static String[][] solution(String[] titles, String[] lyrics, String[] problems) {
+        /*
+정확성 테스트
+테스트 1 〉 통과 (7.33ms, 88.9MB)
+테스트 2 〉 통과 (5.15ms, 80MB)
+테스트 3 〉 통과 (5.81ms, 84.6MB)
+테스트 4 〉 통과 (19.17ms, 90.8MB)
+테스트 5 〉 통과 (2.47ms, 69.8MB)
+효율성 테스트
+테스트 1 〉 통과 (13.08ms, 55MB)
+테스트 2 〉 통과 (30.39ms, 64.7MB)
+테스트 3 〉 통과 (24.71ms, 60.4MB)
+테스트 4 〉 통과 (595.04ms, 406MB)
+테스트 5 〉 통과 (33.64ms, 82MB)*/
         Trie trie = new Trie();
         for (int i = 0; i < titles.length; i++) {
             trie.addLyrics(titles[i], lyrics[i]);

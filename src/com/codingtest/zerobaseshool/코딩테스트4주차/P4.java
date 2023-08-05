@@ -1,10 +1,7 @@
 package com.codingtest.zerobaseshool.코딩테스트4주차;
 
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -75,12 +72,22 @@ public class P4 {
     }
 
     public int[] solution(int[] start, int[] time) {
-        List<Task> tasks = IntStream.range(0, start.length).mapToObj(i -> new Task(start[i] ,time[i], i)).sorted((a, b) -> {
-            if (a.startTime == b.startTime) {
-                return a.index - b.index;
-            }
-            return a.startTime - b.startTime;
-        }).collect(Collectors.toCollection(LinkedList::new));
+        List<Task> tasks = IntStream.range(0, start.length).mapToObj(i -> new Task(start[i] ,time[i], i))
+                    .sorted((a, b) -> {
+                        if (a.startTime == b.startTime) {
+                            return a.index - b.index;
+                        }
+                        return a.startTime - b.startTime;
+                    }).collect(Collectors.toCollection(LinkedList::new));
+        // List<Task> tasks = new LinkedList<>(IntStream.range(0, start.length)
+        //                .mapToObj(i -> new Task(start[i], time[i], i))
+        //                .collect(Collectors.toList()));
+        //tasks.sort((a, b) -> {
+        //            if (a.startTime == b.startTime) {
+        //                return a.index - b.index;
+        //            }
+        //            return a.startTime - b.startTime;
+        //        });
 
         PriorityQueue<Task> priorityQueue = new PriorityQueue<>();
         int[] result = new int[tasks.size()];
@@ -88,7 +95,9 @@ public class P4 {
         int currentTime = 0;
         while (currentIndex < result.length) {
 
-            while (!tasks.isEmpty() && currentTime >= tasks.get(0).startTime) {
+            while (!tasks.isEmpty() && currentTime >= tasks.get(0).startTime) { // 먼저 도착했던 프로세스를 진행시켜 지난 시간 : currentTime,
+                                                                                // 처리해야할 프로세스의 도착시간(시작해야하는 시간) -> 진행해야할 프로세스기 때문에 pq에 넣어야한다.
+                                                                                // 여러 프로세스가 기다리고 있으면 다 넣어야 하기 때문에 while 문
                 priorityQueue.offer(tasks.remove(0));
             }
 
@@ -102,7 +111,12 @@ public class P4 {
         }
         return result;
     }
-    public static void main(String[] args) {
+}
 
+class Test {
+    public static void main(String[] args) {
+        int[] start = {0, 2, 3, 5, 6};
+        int[] time = {2, 4, 2, 1, 3};
+        System.out.println(Arrays.toString(new P4().solution(start, time)));
     }
 }

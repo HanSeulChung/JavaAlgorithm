@@ -5,6 +5,20 @@ import java.util.*;
 
 public class P3 {
     public static String[][] solution(String[] words, String[] queries) {
+        /*
+정확성 테스트
+테스트 1 〉 통과 (2.36ms, 76.3MB)
+테스트 2 〉 통과 (2.39ms, 74.3MB)
+테스트 3 〉 통과 (16.56ms, 86.2MB)
+테스트 4 〉 통과 (13.37ms, 79.9MB)
+테스트 5 〉 통과 (8.55ms, 89.7MB)
+효율성 테스트
+테스트 1 〉 통과 (30.39ms, 62.7MB)
+테스트 2 〉 통과 (540.40ms, 325MB)
+테스트 3 〉 통과 (1042.58ms, 745MB)
+테스트 4 〉 통과 (100.15ms, 92.1MB)
+테스트 5 〉 통과 (874.14ms, 584MB)
+        * */
         Map<Integer, Trie3> trieHashMap = new HashMap<>();
 
         for (int i = 0; i < words.length; i++) {

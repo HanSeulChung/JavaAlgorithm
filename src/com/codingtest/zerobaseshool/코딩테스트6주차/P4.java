@@ -2,6 +2,24 @@ package com.codingtest.zerobaseshool.코딩테스트6주차;
 
 import java.util.*;
 public class P4 {
+    public int[] bestsolution(int[] arr, int k) {
+        int[] answer = new int[arr.length - k + 1];
+
+        PriorityQueue<Integer> window = new PriorityQueue<>(Comparator.reverseOrder());
+
+        for (int i = 0; i < Math.min(arr.length, k); i++) {
+            window.offer(arr[i]);
+        }
+
+        for (int i = 0; i < answer.length - 1; i++) {
+            answer[i] = window.peek();
+            window.remove(arr[i]);
+            window.offer(arr[i + k]);
+        }
+
+        answer[arr.length - k] = window.peek();
+        return answer;
+    }
     public int[] mysolution(int[] arr, int k) {
         int n = arr.length;
         int[] answer = new int[n - k + 1];

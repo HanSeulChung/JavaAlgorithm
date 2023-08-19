@@ -1,6 +1,25 @@
 package com.codingtest.zerobaseshool.코딩테스트6주차;
 
 public class P1 {
+    public int[] bestsolution(int[] values) {
+        int left = 0;
+        int right = 0;
+        int[] answer = {left, right};
+
+        while (right < values.length - 1) {
+            while (right < values.length - 1 && values[right] < values[right + 1]) {
+                right++;
+            }
+
+            if (answer[1] - answer[0] < right - left) {
+                answer = new int[]{left, right};
+            }
+
+            left = right + 1;
+            right = left;
+        }
+        return answer;
+    }
     // 투포인터
     public int[] mysolution(int[] values) {
         int n = values.length;
@@ -60,7 +79,7 @@ public class P1 {
         int left = 0, right = 0;
         int[] result = {left, right};
 
-        while (left <= right) {
+        while (left <= right)    {
             if (right == values.length) {
                 break;
             }

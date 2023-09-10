@@ -12,7 +12,6 @@ package com.lecture.알고리즘.shortestRoute.practices;
 // 출력: 7
 
 
-import sun.plugin2.main.client.WDonatePrivilege;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;

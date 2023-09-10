@@ -10,7 +10,7 @@ public class Solution {
         return sb.toString();
     }
 
-    public String solution1(String my_string, int k) {
-        return my_string.repeat(k);
-    }
+//    public String solution1(String my_string, int k) {
+//        return my_string.repeat(k);
+//    }
 }

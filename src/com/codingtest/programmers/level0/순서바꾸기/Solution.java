@@ -1,5 +1,7 @@
 package com.codingtest.programmers.level0.순서바꾸기;
 
+import java.util.stream.IntStream;
+
 public class Solution {
     public int[] mySolution(int[] num_list, int n) {
         int[] answer = new int[num_list.length];
@@ -13,4 +15,7 @@ public class Solution {
         return answer;
     }
 
+    public int[] solution(int[] num_list, int n) {
+        return IntStream.range(0, num_list.length).map(i -> num_list[(i + n) % num_list.length]).toArray();
+    }
 }

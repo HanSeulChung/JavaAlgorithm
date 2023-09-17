@@ -1,5 +1,9 @@
 package com.codingtest.zerobaseshool.코딩테스트9주차;
 
+/**
+ * Prim 구현 필요
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -41,7 +45,7 @@ public class P5 {
         int result = 0;
         for (List<Integer> connected: connectedNodes) {
             result += 30;
-            result += Prim.solve(graph, connected.get(0));
+//            result += Prim.solve(graph, connected.get(0));
         }
         return result;
     }

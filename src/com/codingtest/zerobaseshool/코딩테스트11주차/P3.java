@@ -13,12 +13,31 @@ class Point {
 }
 
 public class P3 {
+    boolean result;
 
-    // public void makeString(Map map, int idx, String sb) {
+    public void dfs(String s, String[] words) {
+        if (s.equals("")) {
+            result = true;
+            return;
+        }
 
-    // }
+        if (result) {
+            return;
+        }
 
+        for (String word: words) {
+            if (s.startsWith(word)) {
+                dfs(s.substring(word.length()), words);
+            }
+        }
+    }
     public boolean solution(String s, String[] words) {
+        result = false;
+        dfs(s, words);
+        return result;
+    }
+
+    public boolean failSolution(String s, String[] words) {
         boolean answer = true;
 
         Map<String, Integer> map = new HashMap<>();

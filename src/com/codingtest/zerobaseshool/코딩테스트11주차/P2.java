@@ -1,10 +1,37 @@
 package com.codingtest.zerobaseshool.코딩테스트11주차;
 
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class P2 {
+    List<Integer> resultList;
+
+    public void dfs(int num , int n) {
+        if (num > n) {
+            return;
+        }
+
+        if (num > 0) {
+            resultList.add(num);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            int newNum = num * 10 + i;
+            if (newNum == 0) {
+                continue;
+            }
+            dfs(newNum, n);
+        }
+    }
 
     public int[] solution(int n) {
+        resultList = new ArrayList<>();
+        dfs(0, n);
+        return resultList.stream().mapToInt(i -> i).toArray();
+    }
+
+
+
+    public int[] failSolution(int n) {
 
         PriorityQueue<Integer> pq = new PriorityQueue<>(
                 (i, j) -> {

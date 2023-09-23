@@ -1,8 +1,37 @@
 package com.codingtest.zerobaseshool.코딩테스트11주차;
 
+import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class P1 {
+
+    public int solution(int n, int num) {
+        String strNum = String.valueOf(num);
+
+        while (n > 0) {
+            Set<Integer> set = new HashSet<>();
+            for (char c : strNum.toCharArray()) {
+                set.add(Character.getNumericValue(c));
+            }
+
+            List<Integer> list = set.stream()
+                    .sorted().collect(Collectors.toList());
+
+            StringBuilder sb = new StringBuilder();
+            for (int j : list) {
+                long c = strNum.chars().filter(chr -> chr == (char) (j + '0')).count();
+                sb.append(j);
+                sb.append(c);
+            }
+
+            strNum = sb.toString();
+        }
+
+        BigInteger bigInteger = new BigInteger(strNum);
+        return bigInteger.mod(new BigInteger("10004")).intValue();
+    }
+
 
     public int failSolution(int n, int num) {
         // test case만 됨

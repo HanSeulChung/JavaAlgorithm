@@ -1,17 +1,29 @@
 package com.codingtest.programmers.level2.행렬테두리회전하기;
 
 public class Solution {
-  static int[][] map;
-  public void print(int[][] map) {
-    for (int i = 0; i < map.length; i++) {
-      for (int j = 0; j < map[0].length; j++) {
-        System.out.print(map[i][j] + " ");
-      }
-      System.out.println();
+  int[][] map;
 
+  public int[] solution(int rows, int columns, int[][] queries) {
+    int[] answer = new int[queries.length];
+
+    // map 셋팅
+    map = new int[rows][columns];
+    int init = 1;
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < columns; j++) {
+        map[i][j] = init++;
+      }
     }
+
+    int idx = 0;
+    for (int[] query: queries) {
+      answer[idx++] =
+          rotate(query[0] - 1, query[1] - 1, query[2] - 1, query[3] - 1);
+    }
+    return answer;
   }
-  public int rotate(int x1, int y1, int x2, int y2) {
+
+  private int rotate(int x1, int y1, int x2, int y2) {
     // x1, y1 자리에 있는 값 저장
     int tmp = map[x1][y1];
     // 초기 작은 값 셋팅
@@ -42,23 +54,12 @@ public class Solution {
     return min;
   }
 
-  public int[] solution(int rows, int columns, int[][] queries) {
-    int[] answer = new int[queries.length];
-
-    // map 셋팅
-    map = new int[rows][columns];
-    int init = 1;
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < columns; j++) {
-        map[i][j] = init++;
+  private void print(int[][] map) {
+    for (int i = 0; i < map.length; i++) {
+      for (int j = 0; j < map[0].length; j++) {
+        System.out.print(map[i][j] + " ");
       }
+      System.out.println();
     }
-
-    int idx = 0;
-    for (int[] query: queries) {
-      answer[idx++] =
-          rotate(query[0] - 1, query[1] - 1, query[2] - 1, query[3] - 1);
-    }
-    return answer;
   }
 }

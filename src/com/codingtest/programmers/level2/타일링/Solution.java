@@ -1,7 +1,45 @@
 package com.codingtest.programmers.level2.타일링;
 
 public class Solution {
-    static int MOD = 1_000_000_007;
+
+    /**
+     * 3 x n 타일링
+     */
+//    static final int MOD = 1_000_000_007;
+    // static은 정적변수, 다른 클래스와 같이 쓸때 쓰자
+    // static을 쓰면 heap 영역이 아닌 stack 영역에 들어가게 되어서 GC로 메모리를 지울수가 없다.
+    // 남발하지 말자.
+    final int MOD = 1_000_000_007;
+        // final은? 불변성, 상수, 오버라이딩 불가, 상속 불가
+    // 변수 : 상수 , 메서드 : 오버라이딩 불가, 클래스 : 상속 불가
+    public int solution3xn(int n) {
+
+        if (n % 2 != 0) {
+            return 0;
+        }
+
+        int N = n / 2;
+
+        long[] dp = new long[N + 1];
+        long[] sum = new long[N];
+        dp[1] = 3; // 초기값 설정
+        sum[0] = 2;
+
+        for (int i = 2; i <= N; i++) {
+            // f(n) = f(n-1) * 3 + Σ(k=1 to n-2) f(k) * 2
+            dp[i] = (dp[i - 1] * 3 + sum[i - 2]) % MOD;
+
+            sum[i - 1] = (dp[i - 1] * 2 + sum[i - 2]) % MOD;
+
+        }
+        return (int)dp[N] % MOD;
+    }
+
+
+    /**
+     * 2 x n 타일링
+     */
+//    static int MOD = 1_000_000_007;
     public int solution2x1(int n) {
         int[] dp = new int[n  + 1];
 

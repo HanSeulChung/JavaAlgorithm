@@ -14,8 +14,16 @@ public class Solution {
 //    int sumEnemys = Arrays.stream(enemy).sum();
 //    if (sumEnemys <= n) {
 //      return maxEnemys;
-//    } -> 이게있으면 테스트 통과가 안됨. 왜지?
+//    } -> 이게있으면 테스트 통과가 안됨. 왜지? long 타입으로 해도 동일함
 
+//// 1번
+//    long sumEnemys = Arrays.stream(enemy).sum();
+    //2번
+    // long sumEnemys = 0;
+    // for (int i = 0; i< maxEnemys; i++) {
+    //     sumEnemys += enemy[i];
+    // }
+// -> 2번으로 하면 통과가 됨..
     Queue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
     for (int i = 0; i < maxEnemys; i++) {
       n -= enemy[i];

@@ -23,6 +23,10 @@ public class Solution {
     // for (int i = 0; i< maxEnemys; i++) {
     //     sumEnemys += enemy[i];
     // }
+
+//    if (sumEnemys <= n) {
+//      return maxEnemys;
+//    }
 // -> 2번으로 하면 통과가 됨..
     Queue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
     for (int i = 0; i < maxEnemys; i++) {

@@ -14,7 +14,7 @@ public class Solution {
 
       int sum = 0;
 
-      answer += (Math.max(dPointer,pPointer)+1)*2;
+      answer += (Math.max(dPointer, pPointer) + 1) * 2L;
 
       // dPointer 조정
       while(dPointer >= 0 && sum <= cap) {

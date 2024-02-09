@@ -1,24 +1,23 @@
 package com.codingtest.programmers.level2.조이스틱;
 
 public class Solution {
-    public static int solution(String name) {
+    public int solution(String name) {
         int updown = 0;
-        int leftright = name.length() - 1;
+        int n = name.length();
+        int leftright = n - 1;
 
-        for(int i = 0; i < name.length(); i++) {
-            updown += Math.min(name.charAt(i) - 'A', 26 - (name.charAt(i) - 'A'));
-            if (i < name.length() - 1 && name.charAt(i + 1) == 'A') {
-                int endA = i + 1;
-                while(endA < name.length() && name.charAt(endA) == 'A'){
+        for (int idx = 0; idx < n; idx++) {
+            updown += Math.min(name.charAt(idx) - 'A', 26 - (name.charAt(idx) - 'A'));
+
+            if (idx < n - 1 && name.charAt(idx + 1) == 'A') {
+                int endA = idx + 1;
+                while(endA < n && name.charAt(endA) == 'A') {
                     endA++;
                 }
-                leftright = Math.min(leftright, i * 2 + (name.length() - endA));
-                leftright = Math.min(leftright, i + (name.length() - endA) * 2);
+                leftright = Math.min(leftright, idx * 2 + n - endA);
+                leftright = Math.min(leftright, idx + (n - endA) * 2);
             }
         }
         return updown + leftright;
-    }
-    public static void main(String[] args) {
-
     }
 }

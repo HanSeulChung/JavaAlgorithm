@@ -1,46 +1,47 @@
 package com.codingtest.programmers.level1.완주하지못한선수;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Solution {
+    public String solution(String[] participant, String[] completion) {
+        Map<String, Integer> complete = new HashMap<>();
+        for (String completParticipant : completion) {
+            complete.put(completParticipant,
+                complete.getOrDefault(completParticipant, 0) + 1);
+        }
+        StringBuffer answer = new StringBuffer();
+        for (String partPerson : participant) {
+            if (!complete.containsKey(partPerson)) {
+                answer.append(partPerson);
+                break;
+            }
+            complete.put(partPerson,
+                complete.getOrDefault(partPerson, complete.get(partPerson)) - 1);
 
-    public static String solution(String[] participant, String[] completion) {
-        Set<String> setA = new HashSet<>();
-        Set<String> setB = new HashSet<>();
-        for(int i = 0; i < participant.length; i++) {
-            if(setA.contains(participant[i])) {
-                participant[i]= participant[i]+" ";
-                i--;
-                setA.add(participant[i]);
-            } else {
-                setA.add(participant[i]);
+            if (complete.get(partPerson) == 0) {
+                complete.remove(partPerson);
             }
         }
-        for(int i = 0; i < completion.length; i++) {
-            if(setB.contains(completion[i])) {
-                completion[i]=completion[i]+" ";
-                setB.add(completion[i]);
-            } else {
-                setB.add(completion[i]);
-            }
+
+        if (answer.toString().equals("")) {
+            answer.append(complete.keySet().iterator().next());
         }
-        setA.removeAll(setB);
-        setA.toString().replaceAll("[0-9]|\\[|\\]","");
-        return setA.toString().replaceAll("\\s","");
+        return answer.toString();
     }
+
     public static void main(String[] args) {
         String[] participant = {"kiki","leo", "kiki", "eden","kiki",};
         String[] completion = {"eden", "kiki"};
-        System.out.println(solution(participant, completion));
+        Solution s = new Solution();
+        System.out.println(s.solution(participant, completion));
 
         participant = new String[] {"marina", "josipa", "nikola", "vinko", "filipa"};
         completion = new String[] {"josipa", "filipa", "marina", "nikola"};
-        System.out.println(solution(participant, completion));
+        System.out.println(s.solution(participant, completion));
 
         participant = new String[] {"mislav", "stanko", "mislav", "ana"};
         completion = new String[] {"stanko", "ana", "mislav"};
-        System.out.println(solution(participant, completion));
+        System.out.println(s.solution(participant, completion));
 
     }
 }

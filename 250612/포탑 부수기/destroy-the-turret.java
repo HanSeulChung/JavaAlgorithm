@@ -97,6 +97,7 @@ public class Main {
             // System.out.printf("%d: \n", time);
 
             int[][] scanPair = scan(time++);
+            if (scanPair == null) break;
 
             board[scanPair[0][0]][scanPair[0][1]] += (rowSize + colSize);
 
@@ -260,6 +261,8 @@ public class Main {
 
         Tower attackTower = fromTower.poll();
         Tower defenseTower = toTower.poll();
+        if (attackTower == null) return null;
+
         scanPair[0] = new int[]{attackTower.row, attackTower.col};
         timeBoard[attackTower.row][attackTower.col] = time; // 공격한 시간 갱신
         scanPair[1] = new int[]{defenseTower.row, defenseTower.col};

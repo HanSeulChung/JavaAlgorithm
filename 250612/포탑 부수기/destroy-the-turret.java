@@ -94,14 +94,18 @@ public class Main {
         });
 
         while (repeatCount-- > 0) {
+            // System.out.printf("%d: \n", time);
+
             int[][] scanPair = scan(time++);
 
-            board[scanPair[0][0]][scanPair[0][1]] += rowSize + colSize;
+            board[scanPair[0][0]][scanPair[0][1]] += (rowSize + colSize);
+
             boolean[][] isConnected = 
                 attack(scanPair[0][0], scanPair[0][1], scanPair[1][0], scanPair[1][1]
                     , board[scanPair[0][0]][scanPair[0][1]]);
 
             repair(isConnected);
+            // printBoard();
         }
 
         // 반복이 끝나고 가장 공격력이 높은 값 찾기
@@ -117,9 +121,15 @@ public class Main {
     private static void repair(boolean[][] isConnected) {
         for (int row = 0; row < rowSize; row++) {
             for (int col = 0; col < colSize; col++) {
-                if (isConnected[row][col]) continue;
+                if (isConnected[row][col] || board[row][col] == 0) continue;
                 board[row][col]++;
             }
+        }
+    }
+
+    private static void printBoard() {
+        for (int[] rows : board) {
+            System.out.println(Arrays.toString(rows));
         }
     }
 
@@ -127,6 +137,10 @@ public class Main {
         Queue<int[]> attackQueue = new ArrayDeque<>();
         boolean[][] isVisited = new boolean[rowSize][colSize];
         attackQueue.add(new int[]{startRow, startCol});
+        isVisited[startRow][startCol] = true;
+
+        int[][][] prev = new int[rowSize][colSize][2]; // [r][c][0] = prevRow, [r][c][1] = prevCol
+        for (int[][] p : prev) for (int[] x : p) Arrays.fill(x, -1);
 
         boolean isLaserAttack = false;
         while (!attackQueue.isEmpty()) {
@@ -134,18 +148,11 @@ public class Main {
             int curRow = curStatus[0];
             int curCol = curStatus[1];
 
-            isVisited[curRow][curCol] = true;
-
             // 맞춰야하는 포탑에 도착했다면 끝내고 attackScore만큼 공격
             if (curRow == endRow && curCol == endCol) {
                 isLaserAttack = true;
-                board[endRow][endCol] -= curAttackScore;
-                board[endRow][endCol] = Math.max(0, board[endRow][endCol]);
                 break;
             }
-            // 맞춰야하는 포탑이 아닌 주변 포탑이라면 attackScore의 반만큼 공격
-            board[curRow][curCol] -= (curAttackScore /2);
-
             for (int direction = 0; direction < 4; direction++) {
                 int[] nextStatus = move4Direction(curRow, curCol, direction);
                 int nextRow = nextStatus[0];
@@ -153,12 +160,37 @@ public class Main {
 
                 if (board[nextRow][nextCol] == 0) continue; // 이미 무너진 포탑이 있다면 넘어가지 못함
                 if (isVisited[nextRow][nextCol]) continue;
-
+                isVisited[nextRow][nextCol] = true;
                 attackQueue.add(new int[]{nextRow, nextCol});
+                prev[nextRow][nextCol][0] = curRow;
+                prev[nextRow][nextCol][1] = curCol;
             }
         }
-        // 레이저 공격으로 성공했다면 return
-        if (isLaserAttack) return isVisited;
+        // 레이저 공격으로 성공했다면 경로를 추적해서 포탑들을 공격한다.
+        if (isLaserAttack) {
+            // System.out.println("laser!!");
+            boolean[][] damaged = new boolean[rowSize][colSize];
+            int r = endRow, c = endCol;
+
+            while (!(r == startRow && c == startCol)) {
+                int prevRow = prev[r][c][0];
+                int prevCol = prev[r][c][1];
+                if (!(prevRow == startRow && prevCol == startCol)) { // 출발지는 제외
+                    board[prevRow][prevCol] -= (curAttackScore / 2);
+                    board[prevRow][prevCol] = Math.max(0, board[prevRow][prevCol]);
+                    damaged[prevRow][prevCol] = true;
+                }
+                r = prevRow;
+                c = prevCol;
+            }
+
+            // 도착 포탑은 직접 공격
+            board[endRow][endCol] -= curAttackScore;
+            board[endRow][endCol] = Math.max(0, board[endRow][endCol]);
+            damaged[endRow][endCol] = true;
+            damaged[startRow][startCol] = true;
+            return damaged;
+        }
 
         // 아니라면 포탄 공격
         // 다시 visited 배열 갱신 
@@ -177,7 +209,7 @@ public class Main {
             isVisited[nextRow][nextCol] = true;
             board[nextRow][nextCol] -= (curAttackScore /2);
         }
-
+        // System.out.println("!!");
         return isVisited;
     }
 
@@ -189,7 +221,7 @@ public class Main {
         if (nextRow == rowSize) nextRow = 0;
         if (nextCol < 0) nextCol += colSize;
         if (nextCol == colSize) nextCol = 0;
-        
+
         return new int[]{nextRow, nextCol};
     }
 

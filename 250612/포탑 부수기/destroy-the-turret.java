@@ -83,21 +83,7 @@ public class Main {
             if (timeBoard[t1.row][t1.col] != timeBoard[t2.row][t2.col])
                 return timeBoard[t2.row][t2.col] - timeBoard[t1.row][t1.col];
             if (t1.sumRowCol != t2.sumRowCol) return t2.sumRowCol - t1.sumRowCol;
-            return t2.col
-            if (timeBoard[t1.row][t1.col] != timeBoard[t2.row][t2.col]) return timeBoard[t1.row][t1.col] - timeBoard[t2.row][t2.col];
-            if (t1.sumRowCol != t2.sumRowCol) return t1.sumRowCol - t2.sumRowCol;
-            return t1.col - t2.col;
-        \});
-
-        while (repeatCount-- > 0) {
-            int[][] scanPair = scan(time++);
-
-            board[scanPair[0][0]][scanPair[0][1]] += rowSize + colSize;
-            boolean[][] isConnected = 
-
-27778183public class Main {    private static void gameStart() {        fromTower = new PriorityQueue<>((t1, t2) -> {            if (timeBoard[t1.row][t1.col] != timeBoard[t2.row][t2.col])
-
-$0 - t1.col;
+            return t2.col - t1.col;
         });
 
         toTower = new PriorityQueue<>((t1, t2) -> {

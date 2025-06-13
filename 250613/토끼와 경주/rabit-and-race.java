@@ -27,7 +27,8 @@ public class Main {
     static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
     static class Rabbit implements Comparable<Rabbit> {
-        int pId, row, col, distance, score, jumpCount;
+        int pId, row, col, distance, jumpCount; 
+        long score;
 
         public Rabbit(int pId, int distance) {
             this.row = 0;
@@ -47,7 +48,7 @@ public class Main {
             this.col = col;
         }
 
-        public void addScore(int plusScore){
+        public void addScore(long plusScore){
             this.score += plusScore;
         }
 
@@ -101,8 +102,8 @@ public class Main {
         bw.close();
     }
 
-    private static int selectBestRabbitScore() {
-        int maxScore = 0;
+    private static long selectBestRabbitScore() {
+        long maxScore = 0L;
         for (Rabbit rabbit : rabbitList) {
             maxScore = Math.max(maxScore, rabbit.score);
         }
@@ -128,7 +129,7 @@ public class Main {
                     rabbitList.set(0, prioirtyRabbit);
 
                     for (int rabbitIdx = 1; rabbitIdx < rabbitList.size(); rabbitIdx++) {
-                        rabbitList.get(rabbitIdx).addScore(row+col+2); // 0base -> 1base 변환
+                        rabbitList.get(rabbitIdx).addScore((long)(row+col+2)); // 0base -> 1base 변환
                     }
                 }
 

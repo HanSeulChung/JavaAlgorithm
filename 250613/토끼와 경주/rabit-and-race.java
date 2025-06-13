@@ -84,9 +84,9 @@ public class Main {
     static int repeatCount, plusScore, multiplyValue;
     static int bestRabbit = Integer.MIN_VALUE;
     static int[][] commands;
-    static int[] rabbitDistanceForPId;
+    static Map<Integer, Integer> rabbitDistanceForPId;
     static List<Rabbit> rabbitList = new ArrayList<>();
-    static boolean[] selectedRabbit;
+    static Set<Integer> selectedRabbit;
 
     public static void main(String[] args) throws IOException {
         br = new BufferedReader(new InputStreamReader(System.in));
@@ -115,11 +115,11 @@ public class Main {
                 repeatCount = command[1];
                 plusScore = command[2];
 
-                selectedRabbit = new boolean[10_000_001];
+                selectedRabbit = new HashSet<>();
                 for (int repeatIdx = 0; repeatIdx < repeatCount; repeatIdx++) {
                     Collections.sort(rabbitList);
                     Rabbit prioirtyRabbit = rabbitList.get(0);
-                    selectedRabbit[prioirtyRabbit.pId] = true;
+                    selectedRabbit.add(prioirtyRabbit.pId);
                     
                     int[] location = move(prioirtyRabbit);
                     int row = location[0];
@@ -137,7 +137,8 @@ public class Main {
             else if (command[0] == 300) {
                 int changeRabbitPId = command[1];
                 multiplyValue = command[2];
-                rabbitDistanceForPId[changeRabbitPId] *= multiplyValue;
+                rabbitDistanceForPId.put(changeRabbitPId,
+                        rabbitDistanceForPId.get(changeRabbitPId) *multiplyValue);
             }
         }
     }
@@ -153,7 +154,7 @@ public class Main {
 
         for (int idx = 0; idx < rabbitList.size(); idx++) {
             Rabbit rabbit = rabbitList.get(idx);
-            if (!selectedRabbit[rabbit.pId]) continue;
+            if (!selectedRabbit.contains(rabbit.pId)) continue;
             forScore.add(new int[]{rabbit.row + rabbit.col, rabbit.row, rabbit.col
                                     , rabbit.pId, idx});
         }
@@ -170,8 +171,8 @@ public class Main {
         List<Location> locations = new ArrayList<>();
 
         int curPId = selectedRabbit.pId;
-        if (selectedRabbit.distance != rabbitDistanceForPId[curPId]) {
-            selectedRabbit.distance = rabbitDistanceForPId[curPId];
+        if (selectedRabbit.distance != rabbitDistanceForPId.get(curPId)) {
+            selectedRabbit.distance = rabbitDistanceForPId.get(curPId);
         }
         int curDistance = selectedRabbit.distance;
         int curRow = selectedRabbit.row;
@@ -219,12 +220,12 @@ public class Main {
         rabbitCount = Integer.parseInt(st.nextToken());
 
         // rabbit id를 인덱스로 두고 거리 기록 
-        rabbitDistanceForPId = new int[10_000_001];
+        rabbitDistanceForPId = new HashMap<>();
         for (int rabbitIdx = 0; rabbitIdx < rabbitCount; rabbitIdx++) {
             int rabbitPId = Integer.parseInt(st.nextToken());
             int rabbitDistance = Integer.parseInt(st.nextToken());
             rabbitList.add(new Rabbit(rabbitPId, rabbitDistance));
-            rabbitDistanceForPId[rabbitPId] = rabbitDistance;
+            rabbitDistanceForPId.put(rabbitPId, rabbitDistance);
         }
 
         commands = new int[commandCount - 2][3]; // 첫번째와 마지막은 뺀다.

@@ -38,12 +38,9 @@ public class Main {
 
     static int[][] board;
     static int[][] timeBoard;
-    static PriorityQueue<Tower> toTower;
-    static PriorityQueue<Tower> fromTower;
-
     static int maxAttackScore = Integer.MIN_VALUE;
 
-    static class Tower {
+    static class Tower implements Comparable<Tower> {
         int row;
         int col;
         int sumRowCol;
@@ -56,6 +53,13 @@ public class Main {
             this.sumRowCol = row + col;
             this.attackScore = attackScore;
             this.attackTime = attackTime;
+        }
+
+        public int compareTo(Tower t) {
+            if (this.attackScore != t.attackScore) return this.attackScore - t.attackScore;
+            if (this.attackTime != t.attackTime) return t.attackTime - this.attackTime;
+            if (this.sumRowCol != t.sumRowCol) return t.sumRowCol - this.sumRowCol;
+            return t.col - this.col;
         }
     }
 
@@ -77,21 +81,6 @@ public class Main {
     private static void gameStart() {
         timeBoard = new int[rowSize][colSize]; // 공격한 시간 기록 
         int time = 1;
-
-        fromTower = new PriorityQueue<>((t1, t2) -> {
-            if (t1.attackScore != t2.attackScore) return t1.attackScore - t2.attackScore;
-            if (timeBoard[t1.row][t1.col] != timeBoard[t2.row][t2.col])
-                return timeBoard[t2.row][t2.col] - timeBoard[t1.row][t1.col];
-            if (t1.sumRowCol != t2.sumRowCol) return t2.sumRowCol - t1.sumRowCol;
-            return t2.col - t1.col;
-        });
-
-        toTower = new PriorityQueue<>((t1, t2) -> {
-            if (t1.attackScore != t2.attackScore) return t2.attackScore - t1.attackScore;
-            if (timeBoard[t1.row][t1.col] != timeBoard[t2.row][t2.col]) return timeBoard[t1.row][t1.col] - timeBoard[t2.row][t2.col];
-            if (t1.sumRowCol != t2.sumRowCol) return t1.sumRowCol - t2.sumRowCol;
-            return t1.col - t2.col;
-        });
 
         while (repeatCount-- > 0) {
 
@@ -254,30 +243,30 @@ public class Main {
     }
 
     private static int[][] scan(int time) {
-        int[][] scanPair = new int[2][2];
-    
-        for (int row = 0; row < rowSize; row++) {
-            for (int col = 0; col < colSize; col++) {
-                if (board[row][col] == 0) continue;
-                fromTower.add(new Tower(row, col, board[row][col], timeBoard[row][col]));
-                toTower.add(new Tower(row, col, board[row][col], timeBoard[row][col]));
+
+        List<Tower> towerList = new ArrayList<>();
+        for (int r = 0; r < rowSize; r++) {
+            for (int c = 0; c < colSize; c++) {
+                if (board[r][c] > 0) {
+                    towerList.add(new Tower(r, c, board[r][c], timeBoard[r][c]));
+                }
             }
         }
+        // 포탑이 1개 이하라면 종료
+        if (towerList.size() <= 1) return null;
 
-        Tower attackTower = fromTower.poll();
-        Tower defenseTower = toTower.poll();
-        // 포탑이 1개만 남아있거나 아무것도 없을때는 null을 return 하여 반복을 끝낸다.
-        if ((attackTower.row == defenseTower.row 
-                && attackTower.col == defenseTower.col )|| attackTower == null) return null;
+        Collections.sort(towerList);
 
-        scanPair[0] = new int[]{attackTower.row, attackTower.col};
-        timeBoard[attackTower.row][attackTower.col] = time; // 공격한 시간 갱신
-        scanPair[1] = new int[]{defenseTower.row, defenseTower.col};
+        // 첫 번째가 공격자, 마지막이 수비자
+        Tower attackTower  = towerList.get(0);
+        Tower defenseTower = towerList.get(towerList.size() - 1);
 
-        fromTower.clear();
-        toTower.clear();
+        timeBoard[attackTower.row][attackTower.col] = time;
 
-        return scanPair;
+        return new int[][] {
+            { attackTower.row,  attackTower.col },
+            { defenseTower.row, defenseTower.col }
+        };
     }
 
     private static void initInput() throws IOException {

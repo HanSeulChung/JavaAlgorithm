@@ -186,7 +186,7 @@ public class Main {
                 if (nextId == id) {
                     visited[nr][nc] = true;
                     q.offer(new int[]{nr, nc, nextId});
-                } else if (canExit[r][c]) {
+                } else if (canExit[r][c] && board[r][c] == id) {
                     visited[nr][nc] = true;
                     q.offer(new int[]{nr, nc, nextId});
                 } 

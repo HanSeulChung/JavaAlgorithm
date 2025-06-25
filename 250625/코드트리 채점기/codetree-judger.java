@@ -125,9 +125,19 @@ public class Main {
             Task prevTask = domainMap.get(task.domain);
 
             if (prevTask != null) {
-                if (!prevTask.isComplete) continue; // 아직 채점 중
                 if (prevTask.startTime + 3 * prevTask.gap > time) continue; // 3배 조건 위반
             }
+
+            boolean flag = true;
+            for (Task ingTask : gradingMachine) {
+                if (ingTask == null) continue;
+                if (ingTask.domain.equals(task.domain)) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (!flag) continue;
 
             for (int idx = 0; idx < gradingMachineCount; idx++) {
                 if (gradingMachine[idx] == null) {

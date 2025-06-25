@@ -23,7 +23,7 @@ public class Main {
     static int gradingMachineCount;
     static Task[] gradingMachine; // 채점기
     static Map<String, Task> domainMap;
-    static List<Task> waitingQueue; // 대기 큐
+    static PriorityQueue<Task> waitingQueue; // 대기 큐
     static Set<String> domainSet;
 
     static class Task implements Comparable<Task> {
@@ -121,27 +121,38 @@ public class Main {
     }
 
     private static void doGrading(int time) {
-        Collections.sort(waitingQueue);
+        List<Task> skippedTasks = new ArrayList<>();
 
-        for (Task task : waitingQueue) {
+        while (!waitingQueue.isEmpty()) {
+            Task task = waitingQueue.poll();
             Task prevTask = domainMap.get(task.domain);
-            if (domainSet.contains(task.domain)) continue; // 이미 처리 진행중인 도메인이라면 불가
-            if (prevTask != null) {
-                if (prevTask.startTime + 3 * prevTask.gap > time) continue; // 3배 조건 위반
+
+            if (domainSet.contains(task.domain)) {
+                skippedTasks.add(task);
+                continue;
+            }
+            if (prevTask != null && prevTask.startTime + 3 * prevTask.gap > time) {
+                skippedTasks.add(task);
+                continue;
             }
 
             for (int idx = 0; idx < gradingMachineCount; idx++) {
                 if (gradingMachine[idx] == null) {
-                    waitingQueue.remove(task);
                     task.start(time);
                     gradingMachine[idx] = task;
                     domainSet.add(task.domain);
-                    return; // 딱 하나만 채점함
+                    // 나머지 skippedTasks 다시 넣기
+                    waitingQueue.addAll(skippedTasks);
+                    return;
                 }
             }
-            
-            return; // 채점 가능한 task지만 빈 채점기가 없음
+
+            skippedTasks.add(task);
+            break; // 채점기는 없는데 조건 맞는 task가 있었던 경우
         }
+
+        // 처리 못한 task들은 다시 큐에 넣는다.
+        waitingQueue.addAll(skippedTasks);
     }
 
     private static void completeTask(int time, int idx) {
@@ -172,7 +183,7 @@ public class Main {
         gradingMachine = new Task[gradingMachineCount];
         initTask = new Task(1, 0, st.nextToken());
 
-        waitingQueue = new ArrayList<>();
+        waitingQueue = new PriorityQueue<>();
         waitingQueue.add(initTask);
 
         commands = new String[commandCount - 1];

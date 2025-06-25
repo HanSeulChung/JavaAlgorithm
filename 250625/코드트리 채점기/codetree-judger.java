@@ -25,6 +25,7 @@ public class Main {
     static Map<String, Task> domainMap;
     static PriorityQueue<Task> waitingQueue; // 대기 큐
     static Set<String> domainSet;
+    static Set<String> urlSet;
 
     static class Task implements Comparable<Task> {
         int priorityOrder;
@@ -110,14 +111,10 @@ public class Main {
     }
 
     private static void requestGrading(int time, int priorityOrder, String url) {
-        for (Task task : waitingQueue) {
-            if (task.url.equals(url)) {
-                // System.out.printf("time: %d, priorityOrder: %d, url: %s\n", time, priorityOrder, url);
-                return;
-            }
-        }
+        if (urlSet.contains(url)) return;
 
         waitingQueue.add(new Task(priorityOrder, time, url));
+        urlSet.add(url);
     }
 
     private static void doGrading(int time) {
@@ -141,6 +138,7 @@ public class Main {
                     task.start(time);
                     gradingMachine[idx] = task;
                     domainSet.add(task.domain);
+                    urlSet.remove(task.url); 
                     // 나머지 skippedTasks 다시 넣기
                     waitingQueue.addAll(skippedTasks);
                     return;
@@ -186,6 +184,8 @@ public class Main {
         waitingQueue = new PriorityQueue<>();
         waitingQueue.add(initTask);
 
+        urlSet = new HashSet<>();
+        urlSet.add(initTask.url);
         commands = new String[commandCount - 1];
         for (int idx = 0; idx < commandCount - 1; idx++) {
             commands[idx] = br.readLine().trim();

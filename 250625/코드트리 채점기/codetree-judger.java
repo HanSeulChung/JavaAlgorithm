@@ -24,6 +24,7 @@ public class Main {
     static Task[] gradingMachine; // 채점기
     static Map<String, Task> domainMap;
     static List<Task> waitingQueue; // 대기 큐
+    static Set<String> domainSet;
 
     static class Task implements Comparable<Task> {
         int priorityOrder;
@@ -84,6 +85,7 @@ public class Main {
     private static void grading() {
         sb = new StringBuilder();
         domainMap = new HashMap<>();
+        domainSet = new HashSet<>();
 
         for (String command: commands) {
             String[] commandArr = command.split(" ");
@@ -123,27 +125,17 @@ public class Main {
 
         for (Task task : waitingQueue) {
             Task prevTask = domainMap.get(task.domain);
-
+            if (domainSet.contains(task.domain)) continue; // 이미 처리 진행중인 도메인이라면 불가
             if (prevTask != null) {
                 if (prevTask.startTime + 3 * prevTask.gap > time) continue; // 3배 조건 위반
             }
-
-            boolean flag = true;
-            for (Task ingTask : gradingMachine) {
-                if (ingTask == null) continue;
-                if (ingTask.domain.equals(task.domain)) {
-                    flag = false;
-                    break;
-                }
-            }
-
-            if (!flag) continue;
 
             for (int idx = 0; idx < gradingMachineCount; idx++) {
                 if (gradingMachine[idx] == null) {
                     waitingQueue.remove(task);
                     task.start(time);
                     gradingMachine[idx] = task;
+                    domainSet.add(task.domain);
                     return; // 딱 하나만 채점함
                 }
             }
@@ -162,8 +154,9 @@ public class Main {
         gradingMachine[idx] = null;
         completeTask.complete(time);
 
-        // 해당 도메인의 Map을 갱신한다.
+        // 해당 도메인의 Map과 Set을 갱신한다.
         domainMap.put(completeTask.domain, completeTask);
+        domainSet.remove(completeTask.domain);
     }
 
     private static void initInput() throws IOException {

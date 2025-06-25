@@ -118,40 +118,39 @@ public class Main {
     }
 
     private static void doGrading(int time) {
-        List<Task> skippedTasks = new ArrayList<>();
+        PriorityQueue<Task> tempQueue = new PriorityQueue<>();
+        boolean isAssigned = false;
 
         while (!waitingQueue.isEmpty()) {
             Task task = waitingQueue.poll();
             Task prevTask = domainMap.get(task.domain);
 
-            if (domainSet.contains(task.domain)) {
-                skippedTasks.add(task);
-                continue;
-            }
-            if (prevTask != null && prevTask.startTime + 3 * prevTask.gap > time) {
-                skippedTasks.add(task);
+            if (domainSet.contains(task.domain) || 
+                (prevTask != null && prevTask.startTime + 3 * prevTask.gap > time)) {
+                tempQueue.add(task);
                 continue;
             }
 
+            // 채점 가능한 채점기 찾기
             for (int idx = 0; idx < gradingMachineCount; idx++) {
                 if (gradingMachine[idx] == null) {
                     task.start(time);
                     gradingMachine[idx] = task;
                     domainSet.add(task.domain);
-                    urlSet.remove(task.url); 
-                    // 나머지 skippedTasks 다시 넣기
-                    waitingQueue.addAll(skippedTasks);
-                    return;
+                    urlSet.remove(task.url);
+                    isAssigned = true;
+                    break;
                 }
             }
 
-            skippedTasks.add(task);
-            break; // 채점기는 없는데 조건 맞는 task가 있었던 경우
+            if (!isAssigned) tempQueue.add(task);
+            break; // 조건 맞는 task였는데 채점기는 없던 경우
         }
 
-        // 처리 못한 task들은 다시 큐에 넣는다.
-        waitingQueue.addAll(skippedTasks);
+        // 나머지 되돌리기
+        waitingQueue.addAll(tempQueue);
     }
+
 
     private static void completeTask(int time, int idx) {
         // idx인 채점기에 있는 task를 뺀다.

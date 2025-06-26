@@ -26,6 +26,7 @@ public class Main {
     static PriorityQueue<Task> waitingQueue; // 대기 큐
     static Set<String> domainSet;
     static Set<String> urlSet;
+    static int count;
 
     static class Task implements Comparable<Task> {
         int priorityOrder;
@@ -104,7 +105,7 @@ public class Main {
                         Integer.parseInt(commandArr[2]) - 1);
                     break;
                 case 500:
-                    sb.append(waitingQueue.size()).append("\n");
+                    sb.append(count).append("\n");
                     break;
             }
         }
@@ -115,6 +116,7 @@ public class Main {
 
         waitingQueue.add(new Task(priorityOrder, time, url));
         urlSet.add(url);
+        count++;
     }
 
     private static void doGrading(int time) {
@@ -137,6 +139,7 @@ public class Main {
                     domainSet.add(task.domain);
                     iter.remove();
                     urlSet.remove(task.url);
+                    count--;
                     break;
                 }
             }
@@ -178,6 +181,7 @@ public class Main {
 
         urlSet = new HashSet<>();
         urlSet.add(initTask.url);
+        count = 1;
         commands = new String[commandCount - 1];
         for (int idx = 0; idx < commandCount - 1; idx++) {
             commands[idx] = br.readLine().trim();

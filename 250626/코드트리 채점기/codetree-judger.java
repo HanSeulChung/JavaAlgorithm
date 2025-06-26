@@ -23,10 +23,10 @@ public class Main {
     static int gradingMachineCount;
     static Task[] gradingMachine; // 채점기
     static Map<String, Task> domainMap;
+    static Map<String, Integer> waitingPriority;
     static PriorityQueue<Task> waitingQueue; // 대기 큐
     static Set<String> domainSet;
-    static Set<String> urlSet;
-    static int count;
+    static Set<String> fullUrlSet;
 
     static class Task implements Comparable<Task> {
         int priorityOrder;
@@ -88,6 +88,7 @@ public class Main {
         sb = new StringBuilder();
         domainMap = new HashMap<>();
         domainSet = new HashSet<>();
+        fullUrlSet = new HashSet<>();
 
         for (String command: commands) {
             String[] commandArr = command.split(" ");
@@ -105,18 +106,23 @@ public class Main {
                         Integer.parseInt(commandArr[2]) - 1);
                     break;
                 case 500:
-                    sb.append(count).append("\n");
+                    sb.append(waitingQueue.size()).append("\n");
                     break;
             }
         }
     }
 
     private static void requestGrading(int time, int priorityOrder, String url) {
-        if (urlSet.contains(url)) return;
+        Integer priorityForUrl = waitingPriority.get(url);
+        // 대기 큐에 같은 url이 있다면 pass
+        if (priorityForUrl != null) return;
+        // 진행 큐에 같은 우선순위, 같은 url이 있다면 pass
+        if (fullUrlSet.contains(url + "/" + priorityOrder)) return;
 
-        waitingQueue.add(new Task(priorityOrder, time, url));
-        urlSet.add(url);
-        count++;
+        Task possibleTask = new Task(priorityOrder, time, url);
+        waitingQueue.add(possibleTask);
+        // System.out.println("들어감 => " + possibleTask);
+        if (priorityForUrl == null) waitingPriority.put(url, priorityOrder);
     }
 
     private static void doGrading(int time) {
@@ -137,9 +143,10 @@ public class Main {
                     task.start(time);
                     gradingMachine[idx] = task;
                     domainSet.add(task.domain);
-                    iter.remove();
-                    urlSet.remove(task.url);
-                    count--;
+                    // System.out.println("진행 ==> " + task);
+                    waitingQueue.remove(task);
+                    waitingPriority.remove(task.url);
+                    fullUrlSet.add(task.url+"/"+task.priorityOrder);
                     break;
                 }
             }
@@ -157,10 +164,12 @@ public class Main {
         // 채점기에서도 빼고, task 를 완료 시킨다.
         gradingMachine[idx] = null;
         completeTask.complete(time);
-
+        // System.out.println("완료 => " + completeTask);
         // 해당 도메인의 Map과 Set을 갱신한다.
         domainMap.put(completeTask.domain, completeTask);
         domainSet.remove(completeTask.domain);
+
+        fullUrlSet.remove(completeTask.url + "/" + completeTask.priorityOrder);
     }
 
     private static void initInput() throws IOException {
@@ -179,9 +188,11 @@ public class Main {
         waitingQueue = new PriorityQueue<>();
         waitingQueue.add(initTask);
 
-        urlSet = new HashSet<>();
-        urlSet.add(initTask.url);
-        count = 1;
+        waitingPriority = new HashMap<>();
+        waitingPriority.put(initTask.url, initTask.priorityOrder);
+    
+        // System.out.println("들어감 => " + initTask);
+        
         commands = new String[commandCount - 1];
         for (int idx = 0; idx < commandCount - 1; idx++) {
             commands[idx] = br.readLine().trim();
